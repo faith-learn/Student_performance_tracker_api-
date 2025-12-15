@@ -1,2 +1,2 @@
 # Student_performance_tracker_api-
-A Django REST API for tracking university student performance, assessments, and progress alerts.
+A backend API built with Django and Django REST Framework to help university students track academic performance, monitor progress, and receive automated study reminders and performance warnings.
