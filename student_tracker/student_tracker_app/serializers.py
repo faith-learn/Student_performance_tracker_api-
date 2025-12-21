@@ -1,17 +1,19 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from .models import Unit, Assessment, PerformanceStatus, Reminder
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=6)
-
+class UnitSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
+        model = Unit
+        fields = '__all__'
+
+class AssessmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assessment
+        fields = '__all__'
+        read_only_fields = ('student',)  # we'll set student from request
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email'),
-            password=validated_data['password']
-        )
-        return user
+        # ensure the student is the request user
+        request = self.context.get('request')
+        validated_data['student'] = request.user
+        return super().create(validated_data)
