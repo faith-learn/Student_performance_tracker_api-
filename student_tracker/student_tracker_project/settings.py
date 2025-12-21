@@ -120,7 +120,11 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Keep this for your frontend/mobile apps
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
+        # ADD THIS for the browsable API and Admin login
+        'rest_framework.authentication.SessionAuthentication', 
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
