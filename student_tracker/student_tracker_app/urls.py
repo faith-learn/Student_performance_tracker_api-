@@ -1,9 +1,12 @@
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import UnitViewSet, AssessmentViewSet, ReminderViewSet
 
 router = DefaultRouter()
-router.register('units', UnitViewSet)
-router.register('assessments', AssessmentViewSet, basename='assessment')
-router.register('reminders', ReminderViewSet, basename='reminder')
+router.register(r'units', UnitViewSet, basename='unit')
+router.register(r'assessments', AssessmentViewSet, basename='assessment')
+router.register(r'reminders', ReminderViewSet, basename='reminder')
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]
