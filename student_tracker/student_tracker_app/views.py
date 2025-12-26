@@ -1,8 +1,11 @@
 from rest_framework import viewsets, permissions
 from django.contrib.auth.models import User
 from .models import Unit, Assessment, Reminder
-from .serializers import UnitSerializer, AssessmentSerializer, ReminderSerializer
-
+from .serializers import (
+    UnitSerializer,
+    AssessmentSerializer,
+    ReminderSerializer
+)
 
 class UnitViewSet(viewsets.ModelViewSet):
     queryset = Unit.objects.all()
@@ -16,22 +19,13 @@ class AssessmentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+
+        # lecturers (staff) can see all assessments
         if user.is_staff:
             return Assessment.objects.all()
+
+        # students see only their own assessments
         return Assessment.objects.filter(student=user)
-
-    def perform_create(self, serializer):
-        """
-        Automatically assign performance status
-        """
-        marks = serializer.validated_data.get("marks")
-
-        if marks >= 50:
-            status = "Pass"
-        else:
-            status = "Fail"
-
-        serializer.save(student=self.request.user, status=status)
 
 
 class ReminderViewSet(viewsets.ModelViewSet):
@@ -39,7 +33,9 @@ class ReminderViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Reminder.objects.filter(student=self.request.user)
+        user = self.request.user
 
-    def perform_create(self, serializer):
-        serializer.save(student=self.request.user)
+        if user.is_staff:
+            return Reminder.objects.all()
+
+        return Reminder.objects.filter(student=user)
