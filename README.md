@@ -25,7 +25,7 @@ This project addresses that gap by:
 - AI-inspired performance logic
 
 
-## AI-Powered Logic (Explained Simply)
+## AI-Powered Logic 
 The system uses rule-based intelligence to simulate AI behavior.
 
 Based on assessment marks:
